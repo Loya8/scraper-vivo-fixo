@@ -3,16 +3,51 @@ import urllib.parse
 import time
 import math
 from selenium import webdriver
+from get_ruas import pega_ruas
+from importa_csv import limpa_telefones_e_importa_para_csv
 
 chromedriver_location = "./chromedriver"
-street_file = open('./txt/ruas.txt', 'r').read()
-street_list = street_file.split('\n')
+
+street_file = open('./txt/ruas.txt', 'r')
+street_texto = street_file.read()
+street_list = street_texto.split('\n')
+street_list = [string for string in street_list if string != ""]
+
+cidade = ''
+
+if(len(street_list) == 0):
+    street_file.close()
+
+    print("O arquivo de ruas esta vazio...")
+    cidade = input("Digite o nome da cidade: ").strip()
+    print("Populando o arquivo com as ruas da cidade...")
+    pega_ruas(cidade)
+    
+    street_texto = open('./txt/ruas.txt', 'r').read()
+    street_list = street_texto.split('\n')
+    street_list = [string for string in street_list if string != ""]
+else:
+    print("Encontrei ruas no ruas.txt")
+    resposta = input("Quer limpar o arquivo e pegar ruas novamente? (S/n)\n").strip().lower()
+    if(resposta == 's'):
+        street_file.close()
+
+        cidade = input("Digite o nome da cidade: ").strip()
+        print("Populando o arquivo com as ruas da cidade...")
+        pega_ruas(cidade)
+
+        street_texto = open('./txt/ruas.txt', 'r').read()
+        street_list = street_texto.split('\n')
+        street_list = [string for string in street_list if string != ""]
+    else:
+        cidade = input("Digite o nome da cidade: ").strip()
+
 url = "https://meuvivofixo.vivo.com.br/servlet/Satellite?c=Page&cid=1382552299186&pagename=MeuVivoFixo%2FPage%2FTemplateGlobalAreaAberta"
 driver = webdriver.Chrome(chromedriver_location)
 driver.get(url)
 
-file_telefones = open("./txt/telefones.txt", "a+")
-file_nomes = open("./txt/nomes.txt", "a+")
+file_telefones = open("./txt/telefones.txt", "w")
+file_nomes = open("./txt/nomes.txt", "w")
 
 numero_inicial = 1
 
@@ -30,24 +65,33 @@ for street in street_list:
     driver.find_element_by_xpath(xpath_campo_endereco).send_keys(street)
     driver.find_element_by_xpath(xpath_campo_numero).send_keys("{num}".format(num=numero_inicial))
     driver.find_element_by_xpath(xpath_campo_ate_numero).send_keys("99999")
-    driver.find_element_by_xpath(xpath_campo_cidade).send_keys("Salto")
+    driver.find_element_by_xpath(xpath_campo_cidade).send_keys(cidade)
 
     driver.find_element_by_xpath(xpath_botao_pesquisar).click()
 
-    time.sleep(30)
+    time.sleep(4)
 
     xpath_quantidade_resultados = '//*[@id="formWCSVivo"]/div/p'
 
-    try:
-        texto_quantidade = driver.find_element_by_xpath(xpath_quantidade_resultados).text
-    except:
-        time.sleep(30)
-        xpath_botao_ok = '//*[@id="btnOK"]/span'
-        driver.find_element_by_xpath(xpath_botao_ok).click()
-        time.sleep(1)
-        driver.find_element_by_xpath(xpath_botao_pesquisar).click()
-        time.sleep(4)
-        texto_quantidade = driver.find_element_by_xpath(xpath_quantidade_resultados).text
+    tentativas_maxima = 60
+    for i in range(tentativas_maxima):
+        try:
+            texto_quantidade = driver.find_element_by_xpath(xpath_quantidade_resultados).text
+        except:
+            time.sleep(4)
+            try:
+                xpath_botao_ok = '//*[@id="btnOK"]/span'
+                driver.find_element_by_xpath(xpath_botao_ok).click()
+            except:
+                continue
+            else:
+                time.sleep(1)
+                driver.find_element_by_xpath(xpath_botao_pesquisar).click()
+                time.sleep(4)
+                texto_quantidade = driver.find_element_by_xpath(xpath_quantidade_resultados).text
+                break
+        else:
+            break
 
     texto_quantidade = texto_quantidade.strip()
 
@@ -107,7 +151,6 @@ for street in street_list:
         except ValueError:
             ultimo_numero = int(ultimo_endereco_split[-1].split('-')[0].strip())
         numero_inicial = ultimo_numero + 1
-        repete = False
         street_list.insert(0, street)
     else:
         numero_inicial = 1
@@ -119,3 +162,7 @@ for street in street_list:
 
 file_telefones.close()
 file_nomes.close()
+
+limpa_telefones_e_importa_para_csv(cidade)
+
+driver.quit()
