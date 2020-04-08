@@ -15,6 +15,9 @@ street_list = [string for string in street_list if string != ""]
 
 cidade = ''
 
+file_telefones = open("./txt/telefones.txt", "a")
+file_nomes = open("./txt/nomes.txt", "a")
+
 if(len(street_list) == 0):
     street_file.close()
 
@@ -26,6 +29,12 @@ if(len(street_list) == 0):
     street_texto = open('./txt/ruas.txt', 'r').read()
     street_list = street_texto.split('\n')
     street_list = [string for string in street_list if string != ""]
+
+    file_telefones.close()
+    file_nomes.close()
+
+    file_telefones = open("./txt/telefones.txt", "w")
+    file_nomes = open("./txt/nomes.txt", "w")
 else:
     print("Encontrei ruas no ruas.txt")
     resposta = input("Quer limpar o arquivo e pegar ruas novamente? (S/n)\n").strip().lower()
@@ -39,6 +48,12 @@ else:
         street_texto = open('./txt/ruas.txt', 'r').read()
         street_list = street_texto.split('\n')
         street_list = [string for string in street_list if string != ""]
+
+        file_telefones.close()
+        file_nomes.close()
+
+        file_telefones = open("./txt/telefones.txt", "w")
+        file_nomes = open("./txt/nomes.txt", "w")
     else:
         cidade = input("Digite o nome da cidade: ").strip()
 
@@ -46,8 +61,7 @@ url = "https://meuvivofixo.vivo.com.br/servlet/Satellite?c=Page&cid=138255229918
 driver = webdriver.Chrome(chromedriver_location)
 driver.get(url)
 
-file_telefones = open("./txt/telefones.txt", "w")
-file_nomes = open("./txt/nomes.txt", "w")
+
 
 numero_inicial = 1
 
@@ -164,5 +178,13 @@ file_telefones.close()
 file_nomes.close()
 
 limpa_telefones_e_importa_para_csv(cidade)
+
+# limpa arquivos
+file_telefones = open("./txt/telefones.txt", "w")
+file_nomes = open("./txt/nomes.txt", "w")
+file_ruas = open("./txt/ruas.txt", "w")
+file_telefones.close()
+file_nomes.close()
+file_ruas.close()
 
 driver.quit()
