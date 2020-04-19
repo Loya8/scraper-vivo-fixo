@@ -2,10 +2,13 @@
 Coleta nomes e telefones de usuários de vivo fixo de uma dada cidade
 
 # Instalando
+
+Considerando Python 3 e pip devidamente configurado:
+
 ```
 pip install bs4 selenium
 ```
 
-Baixar https://chromedriver.chromium.org/downloads de acordo com versão do Chrome e OS que está usando.
+Baixar https://chromedriver.chromium.org/downloads de acordo com versão do Chrome e SO que você está usando.
 
-Mude a variável chromedriver_location de acordo com o lugar que o mesmo se encontra.
+Mude a variável ```chromedriver_location``` no main.py e coloque o local que o mesmo se encontra no seu computador.
