@@ -6,7 +6,9 @@ from selenium import webdriver
 from get_ruas import pega_ruas
 from importa_csv import limpa_telefones_e_importa_para_csv
 
-chromedriver_location = "./chromedriver"
+# O driver varia de acordo com o OS...
+# Versões desatualizadas também não vão funcionar então baixe na hora de usar.
+chromedriver_location = "C:\\chromedriver"
 
 street_file = open('./txt/ruas.txt', 'r')
 street_texto = street_file.read()
@@ -57,11 +59,12 @@ else:
     else:
         cidade = input("Digite o nome da cidade: ").strip()
 
+opts = webdriver.chrome.options.Options()
+opts.headless = True
+
 url = "https://meuvivofixo.vivo.com.br/servlet/Satellite?c=Page&cid=1382552299186&pagename=MeuVivoFixo%2FPage%2FTemplateGlobalAreaAberta"
 driver = webdriver.Chrome(chromedriver_location)
 driver.get(url)
-
-
 
 numero_inicial = 1
 
