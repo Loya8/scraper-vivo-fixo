@@ -12,7 +12,7 @@ def main():
     # Versões desatualizadas também não vão funcionar então baixe na hora de usar.
     chromedriver_location = "C:\\chromedriver"
 
-    cidade = input("Digite uma cidade (SP): ").strip().lower()
+    cidade = input("Digite uma cidade (SP): ").strip()
 
     street_list = pega_ruas(cidade)
     street_list = [string for string in street_list if string != ""]
@@ -28,7 +28,9 @@ def main():
 
     numero_inicial = 1
 
-    file_telefones = open('./txt/telefones_{cidade}.txt'.format(cidade=cidade), 'w')
+    nome_cidade_arquivo = cidade.replace(' ', '-').lower()
+
+    file_telefones = open('./txt/telefones_{cidade}.txt'.format(cidade=nome_cidade_arquivo), 'w')
 
     for street in street_list:
         print(street)
