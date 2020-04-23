@@ -2,13 +2,11 @@ import csv
 import time
 
 def limpa_telefones_e_importa_para_csv(cidade):
-
-    cidade = cidade.strip()
-    cidade = cidade.lower()
-
+    # limpa o parametro
+    cidade = cidade.strip().lower()
     cidade = cidade.replace(' ', '-')
-    
-    file_tel = open('./txt/telefones.txt', 'r').read()
+
+    file_tel = open('./txt/telefones_{cidade}.txt'.format(cidade=cidade), 'r').read()
     tels = file_tel.split('\n')
     sem_dup = list(set(tels))
     sem_dup_filtrado = [string for string in sem_dup if string != ""]
