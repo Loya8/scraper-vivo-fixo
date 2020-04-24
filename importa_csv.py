@@ -13,7 +13,7 @@ def limpa_telefones_e_importa_para_csv(cidade):
 
     total = len(sem_dup_filtrado)
     total_proc_5 = total - 5
-    with open('./csv/telefones_vivo_fixo_{cidade}.csv'.format(cidade = cidade), 'w') as f:
+    with open('./csv/telefones_vivo_fixo_{cidade}.csv'.format(cidade = cidade), 'w', newline='') as f:
         writer = csv.writer(f)
         i = 0
         while i < total_proc_5:
@@ -37,3 +37,5 @@ def limpa_telefones_e_importa_para_csv(cidade):
             pass
     
     print(len(sem_dup_filtrado))
+
+limpa_telefones_e_importa_para_csv('Salto')
