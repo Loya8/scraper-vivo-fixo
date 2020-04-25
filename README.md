@@ -1,13 +1,11 @@
 # scraper-vivo-fixo
 Coleta nomes e telefones de usuários de vivo fixo de uma dada cidade
 
-# Instalando
+## Instalando
 
 Considerando Python 3 e pip devidamente configurado:
 
-```
-pip install bs4 selenium
-```
+```pip install bs4 selenium```
 
 Baixar https://chromedriver.chromium.org/downloads de acordo com versão do Chrome e SO que você está usando.
 
