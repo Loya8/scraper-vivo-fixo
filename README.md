@@ -7,7 +7,7 @@ Considerando Python 3 e pip devidamente configurado:
 
 ```pip install bs4 selenium```
 
-Baixar https://chromedriver.chromium.org/downloads de acordo com versão do Chrome e SO que você está usando.
+Baixar https://github.com/mozilla/geckodriver/releases de acordo com versão do Firefox e SO que você está usando.
 
-Mude a variável ```chromedriver_location``` no main.py e coloque o local que o mesmo se encontra no seu computador.
+Colocar webdriver na pasta do repositorio.
 
